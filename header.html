@@ -1,0 +1,80 @@
+<!-- TOPBAR -->
+<div id="topbar">
+  <div class="tb-l">
+    <a href="tel:+919999999999"><i class="fa-solid fa-phone fa-xs"></i> +(91) 99999 99999</a>
+    <div class="tb-sep"></div>
+    <a href="mailto:info@logicnestechno.com"><i class="fa-solid fa-envelope fa-xs"></i> info@logicnestechno.com</a>
+    <div class="tb-sep"></div>
+    <span><i class="fa-solid fa-location-dot fa-xs"></i> Bengaluru, Karnataka</span>
+  </div>
+  <div class="tb-r">
+    <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+    <a href="#" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a>
+    <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+    <a href="#" aria-label="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav id="nav">
+  <a class="n-logo" href="index.html">
+    <div class="n-mark"><span>L</span><div class="n-pulse"></div></div>
+    <div class="n-name">Logic<em>Nes</em></div>
+  </a>
+  <ul class="n-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About Us</a></li>
+    <li><a href="contact-us.html">Contact Us</a></li>
+    <li><a href="pricing.html">Pricing</a></li>
+    <li><a href="payment.html">Payment</a></li>
+    <li><a href="#" onclick="openModal()" class="n-cta"><i class="fa-solid fa-rocket fa-xs"></i> Get Demo</a></li>
+  </ul>
+  <button class="ham" id="ham" aria-label="Menu">
+    <span class="hb hb1"></span>
+    <span class="hb hb2"></span>
+    <span class="hb hb3"></span>
+  </button>
+</nav>
+
+<!-- MOBILE MENU — fullscreen overlay -->
+<div class="mob-menu" id="mobmenu">
+  <div class="mob-bg"></div>
+  <button class="mob-x" onclick="closeMob()" aria-label="Close menu">
+    <span></span><span></span>
+  </button>
+  <div class="mob-brand">
+    <div class="n-mark"><span>L</span></div>
+    <div class="n-name" style="color:#fff">Logic<em>Nes</em></div>
+  </div>
+  <div class="mob-links">
+    <a href="index.html" onclick="closeMob()" style="--i:0">Home</a>
+    <a href="about.html" onclick="closeMob()" style="--i:1">About Us</a>
+    <a href="pricing.html" onclick="closeMob()" style="--i:2">Pricing</a>
+    <a href="payment.html" onclick="closeMob()" style="--i:3">Payment</a>
+    <a href="contact-us.html" onclick="closeMob()" style="--i:4">Contact Us</a>
+    <a href="#" onclick="openModal();closeMob()" class="mob-cta" style="--i:5"><i class="fa-solid fa-rocket fa-xs"></i> Get Demo</a>
+  </div>
+  <div class="mob-bottom">
+    <a href="tel:+919999999999"><i class="fa-solid fa-phone"></i></a>
+    <a href="mailto:info@logicnestechno.com"><i class="fa-solid fa-envelope"></i></a>
+    <a href="https://wa.me/919999999999"><i class="fa-brands fa-whatsapp"></i></a>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-bg" id="modal">
+  <div class="modal-box">
+    <div class="modal-accent"></div>
+    <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+    <div class="modal-head">
+      <div class="modal-ico"><i class="fa-solid fa-rocket"></i></div>
+      <h3>Get Free Demo Now!</h3>
+      <p class="sub">Fill in your details — our team will call you within 2 hours.</p>
+    </div>
+    <div class="m-field"><input type="text" placeholder="Your Name"></div>
+    <div class="m-field"><input type="tel" placeholder="Contact Number"></div>
+    <div class="m-field"><input type="email" placeholder="Email Address"></div>
+    <div class="m-field"><textarea placeholder="Tell us about your trading goals..."></textarea></div>
+    <button class="m-submit" onclick="handleModal(this)">Submit Enquiry <i class="fa-solid fa-arrow-right fa-sm"></i></button>
+  </div>
+</div>

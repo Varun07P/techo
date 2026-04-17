@@ -1,0 +1,1842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LogicNes Techno | Algo Trading Software</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* ═══════════════════════════════════════
+   DESIGN SYSTEM
+═══════════════════════════════════════ */
+:root{
+  /* Core palette — deep navy + electric emerald accent */
+  --ink:       #04080f;
+  --ink2:      #0b1220;
+  --ink3:      #111827;
+  --surface:   #ffffff;
+  --off:       #f5f7fc;
+  --em:        #00d68f;   /* primary accent — emerald */
+  --em2:       #00b87a;
+  --em-glow:   rgba(0,214,143,0.18);
+  --gold:      #f59e0b;
+  --gold2:     #fbbf24;
+  --red:       #ef4444;
+  --blue:      #3b82f6;
+  --muted:     #6b7280;
+  --border:    #e5e7eb;
+  --border-d:  rgba(255,255,255,0.08);
+
+  /* Typography */
+  --head:'Bricolage Grotesque',sans-serif;
+  --body:'DM Sans',sans-serif;
+
+  /* Radius */
+  --r-sm:8px; --r-md:14px; --r-lg:20px; --r-xl:28px;
+
+  /* Nav height */
+  --nh:68px;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--body);background:var(--surface);color:var(--ink);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* scrollbar */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:var(--em);border-radius:2px}
+
+/* ═══════════════════════════════════════
+   TOPBAR
+═══════════════════════════════════════ */
+#topbar{
+  background:linear-gradient(90deg,var(--ink2),var(--ink));height:38px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 5vw;font-size:12px;color:rgba(255,255,255,0.45);
+  border-bottom:1px solid rgba(255,255,255,0.04);
+  position:relative;overflow:hidden;
+}
+#topbar::after{
+  content:'';position:absolute;bottom:0;left:0;width:100%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--em),transparent);opacity:.4;
+}
+.tb-l,.tb-r{display:flex;align-items:center;gap:18px}
+.tb-l a,.tb-r a,.tb-l span{color:rgba(255,255,255,0.45);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .25s}
+.tb-l a:hover,.tb-r a:hover{color:var(--em)}
+.tb-r a{width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,.08);
+  display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .25s}
+.tb-r a:hover{border-color:var(--em);background:rgba(0,214,143,.1);color:var(--em)}
+.tb-sep{width:1px;height:12px;background:rgba(255,255,255,0.08)}
+
+/* ═══════════════════════════════════════
+   NAVBAR — Premium Glassmorphic
+═══════════════════════════════════════ */
+#nav{
+  position:sticky;top:0;z-index:900;height:var(--nh);
+  background:rgba(255,255,255,0.92);backdrop-filter:blur(24px) saturate(1.8);
+  border-bottom:1px solid rgba(0,0,0,.06);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 5vw;transition:all .4s cubic-bezier(.4,0,.2,1);
+}
+#nav.scrolled{
+  background:rgba(255,255,255,0.97);
+  box-shadow:0 4px 32px rgba(0,0,0,0.08),0 1px 0 rgba(0,214,143,.15);
+}
+
+/* Logo */
+.n-logo{display:flex;align-items:center;gap:11px;text-decoration:none}
+.n-mark{
+  width:40px;height:40px;border-radius:12px;
+  background:linear-gradient(135deg,var(--ink),var(--ink2));
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  box-shadow:0 4px 16px rgba(0,0,0,.2);
+}
+.n-mark span{font-family:var(--head);font-weight:800;font-size:19px;color:#fff;position:relative;z-index:2}
+.n-pulse{
+  position:absolute;bottom:-3px;right:-3px;width:14px;height:14px;border-radius:50%;
+  background:var(--em);z-index:3;
+  box-shadow:0 0 12px var(--em),0 0 24px rgba(0,214,143,.3);
+  animation:pulse-glow 2.5s ease-in-out infinite;
+}
+@keyframes pulse-glow{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.3);opacity:.6}}
+.n-name{font-family:var(--head);font-weight:700;font-size:20px;color:var(--ink);letter-spacing:-.3px}
+.n-name em{color:var(--em2);font-style:normal}
+
+/* Nav Links */
+.n-links{display:flex;gap:4px;list-style:none;align-items:center}
+.n-links a{
+  color:#4b5563;text-decoration:none;font-size:14px;font-weight:500;
+  padding:8px 16px;border-radius:100px;transition:all .3s;position:relative;
+}
+.n-links a:hover{color:var(--ink);background:var(--off)}
+.n-links a::after{
+  content:'';position:absolute;bottom:4px;left:50%;width:0;height:2px;
+  background:var(--em);border-radius:1px;transition:all .3s;transform:translateX(-50%);
+}
+.n-links a:hover::after{width:20px}
+
+/* CTA Button */
+.n-cta{
+  background:linear-gradient(135deg,var(--em),var(--em2))!important;
+  color:var(--ink)!important;font-weight:700!important;font-size:13.5px!important;
+  border-radius:100px!important;padding:10px 24px!important;
+  border:none!important;
+  box-shadow:0 4px 20px rgba(0,214,143,0.35);
+  transition:all .3s!important;display:inline-flex!important;align-items:center!important;gap:8px!important;
+}
+.n-cta:hover{
+  transform:translateY(-2px)!important;
+  box-shadow:0 8px 32px rgba(0,214,143,0.5)!important;
+}
+.n-cta::after{display:none!important}
+
+/* Hamburger — animated 3-line to X */
+.ham{
+  display:none;background:none;border:none;cursor:pointer;
+  width:44px;height:44px;border-radius:12px;
+  align-items:center;justify-content:center;
+  transition:background .2s;position:relative;z-index:995;
+}
+.ham:hover{background:var(--off)}
+.hb{
+  display:block;width:22px;height:2px;background:var(--ink);border-radius:2px;
+  position:absolute;left:11px;transition:all .4s cubic-bezier(.68,-.55,.27,1.55);
+}
+.hb1{top:14px}
+.hb2{top:21px;width:16px}
+.hb3{top:28px}
+.ham.active .hb1{transform:rotate(45deg);top:21px;width:22px}
+.ham.active .hb2{opacity:0;transform:translateX(10px)}
+.ham.active .hb3{transform:rotate(-45deg);top:21px;width:22px}
+.ham.active .hb{background:var(--em)}
+
+/* ═══════════════════════════════════════
+   MOBILE MENU — Premium Fullscreen
+═══════════════════════════════════════ */
+.mob-menu{
+  position:fixed;inset:0;z-index:990;
+  pointer-events:none;opacity:0;
+  transition:opacity .35s;
+}
+.mob-menu.open{pointer-events:all;opacity:1}
+.mob-bg{
+  position:absolute;inset:0;
+  background:linear-gradient(160deg,var(--ink) 0%,var(--ink2) 50%,#071420 100%);
+  transform:scaleY(0);transform-origin:top;transition:transform .45s cubic-bezier(.77,0,.18,1);
+}
+.mob-menu.open .mob-bg{transform:scaleY(1)}
+
+.mob-x{
+  position:absolute;top:18px;right:5vw;z-index:2;
+  width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .2s;
+}
+.mob-x:hover{background:rgba(0,214,143,.15);border-color:var(--em)}
+.mob-x span{
+  display:block;width:20px;height:2px;background:#fff;border-radius:2px;
+  position:absolute;
+}
+.mob-x span:first-child{transform:rotate(45deg)}
+.mob-x span:last-child{transform:rotate(-45deg)}
+
+.mob-brand{
+  position:absolute;top:18px;left:5vw;z-index:2;
+  display:flex;align-items:center;gap:11px;
+}
+
+.mob-links{
+  position:relative;z-index:2;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;height:100%;gap:8px;
+}
+.mob-links a{
+  font-family:var(--head);font-weight:700;font-size:28px;
+  color:rgba(255,255,255,.7);text-decoration:none;
+  padding:8px 20px;border-radius:12px;
+  transform:translateY(30px);opacity:0;
+  transition:all .4s cubic-bezier(.25,.46,.45,.94);
+  transition-delay:calc(var(--i) * .07s + .2s);
+}
+.mob-menu.open .mob-links a{transform:translateY(0);opacity:1}
+.mob-links a:hover{color:#fff;background:rgba(255,255,255,.06)}
+.mob-cta{
+  margin-top:16px;
+  background:linear-gradient(135deg,var(--em),var(--em2))!important;
+  color:var(--ink)!important;font-size:18px!important;
+  padding:14px 36px!important;border-radius:100px!important;
+  box-shadow:0 6px 24px rgba(0,214,143,.35);
+}
+.mob-cta:hover{box-shadow:0 10px 36px rgba(0,214,143,.5)!important}
+
+.mob-bottom{
+  position:absolute;bottom:40px;left:0;right:0;z-index:2;
+  display:flex;justify-content:center;gap:16px;
+  opacity:0;transform:translateY(20px);
+  transition:all .4s .5s;
+}
+.mob-menu.open .mob-bottom{opacity:1;transform:translateY(0)}
+.mob-bottom a{
+  width:48px;height:48px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.12);
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,.5);font-size:18px;text-decoration:none;
+  transition:all .25s;
+}
+.mob-bottom a:hover{border-color:var(--em);color:var(--em);background:rgba(0,214,143,.1)}
+
+/* ═══════════════════════════════════════
+   FOOTER — Premium Dark with CTA Banner
+═══════════════════════════════════════ */
+.ft-cta{
+  background:linear-gradient(135deg,var(--em),var(--em2),#009966);
+  padding:56px 5vw;position:relative;overflow:hidden;
+}
+.ft-cta::before{
+  content:'';position:absolute;inset:0;
+  background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.06'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.ft-cta-inner{
+  position:relative;z-index:2;display:flex;align-items:center;
+  justify-content:space-between;gap:32px;max-width:1200px;margin:0 auto;
+  flex-wrap:wrap;
+}
+.ft-cta-left h3{font-family:var(--head);font-weight:800;font-size:clamp(22px,3vw,32px);color:var(--ink);margin-bottom:8px}
+.ft-cta-left p{font-size:15px;color:rgba(0,0,0,.55);max-width:500px}
+.ft-cta-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--ink);color:#fff;font-family:var(--head);font-weight:700;
+  font-size:15px;padding:16px 36px;border-radius:100px;text-decoration:none;
+  box-shadow:0 8px 28px rgba(0,0,0,.25);transition:all .3s;
+}
+.ft-cta-btn:hover{transform:translateY(-3px);box-shadow:0 14px 40px rgba(0,0,0,.35)}
+
+footer{
+  background:var(--ink);padding:80px 5vw 0;color:rgba(255,255,255,.5);
+  position:relative;overflow:hidden;
+}
+footer::before{
+  content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,.02) 1px,transparent 0);
+  background-size:32px 32px;pointer-events:none;
+}
+.ft-logo{display:flex;align-items:center;gap:11px;margin-bottom:20px}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1.4fr;gap:52px;padding-bottom:60px;position:relative;z-index:2}
+.ft-brand p{font-size:13.5px;line-height:1.85;max-width:280px}
+.ft-socials{display:flex;gap:8px;margin-top:24px}
+.fsoc{
+  width:36px;height:36px;border-radius:10px;
+  border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,.4);font-size:14px;text-decoration:none;
+  transition:all .3s;
+}
+.fsoc:hover{
+  border-color:var(--em);color:var(--em);background:rgba(0,214,143,.1);
+  transform:translateY(-3px);box-shadow:0 6px 16px rgba(0,214,143,.15);
+}
+.ft-col h4{
+  font-family:var(--head);font-weight:700;font-size:14px;color:#fff;
+  margin-bottom:20px;letter-spacing:.3px;position:relative;padding-bottom:12px;
+}
+.ft-col h4::after{content:'';position:absolute;bottom:0;left:0;width:24px;height:2px;background:var(--em);border-radius:1px}
+.ft-col ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.ft-col a{
+  color:rgba(255,255,255,.45);text-decoration:none;font-size:13.5px;
+  transition:all .25s;display:flex;align-items:center;gap:8px;
+}
+.ft-col a i{color:var(--em);opacity:.5;transition:opacity .25s;font-size:8px}
+.ft-col a:hover{color:#fff;padding-left:4px}
+.ft-col a:hover i{opacity:1}
+.ft-contact-item{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px;font-size:13.5px}
+.fci-ico{
+  width:32px;height:32px;border-radius:9px;
+  background:rgba(0,214,143,.08);border:1px solid rgba(0,214,143,.12);
+  display:flex;align-items:center;justify-content:center;font-size:13px;
+  flex-shrink:0;color:var(--em);margin-top:1px;transition:all .25s;
+}
+.ft-contact-item:hover .fci-ico{background:rgba(0,214,143,.15);border-color:var(--em);transform:scale(1.05)}
+.fci-v{color:rgba(255,255,255,.45);padding-top:5px}
+.fci-v a{color:rgba(255,255,255,.45);text-decoration:none;transition:color .25s;display:inline}
+.fci-v a:hover{color:var(--em)}
+
+.ft-bottom{
+  border-top:1px solid rgba(255,255,255,.06);padding:24px 0;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:12px;font-size:12.5px;position:relative;z-index:2;
+}
+.ft-disc{font-size:11px;color:rgba(255,255,255,.2);max-width:480px;line-height:1.65}
+.ft-glow{
+  position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent 5%,var(--em) 50%,transparent 95%);opacity:.5;
+}
+
+/* ═══════════════════════════════════════
+   FLOATING WIDGET
+═══════════════════════════════════════ */
+.float-widget{
+  position:fixed;bottom:28px;right:28px;
+  display:flex;flex-direction:column;gap:10px;z-index:9999;
+}
+.fw-btn{
+  width:54px;height:54px;border-radius:50%;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;color:#fff;
+  box-shadow:0 6px 24px rgba(0,0,0,.25);
+  transition:all .3s;text-decoration:none;position:relative;
+}
+.fw-btn:hover{transform:scale(1.12) translateY(-2px);box-shadow:0 12px 32px rgba(0,0,0,.3)}
+.fw-call{background:linear-gradient(135deg,var(--em),var(--em2))}
+.fw-wa{background:linear-gradient(135deg,#25d366,#128c7e)}
+.fw-wa::before{
+  content:'';position:absolute;inset:-4px;border-radius:50%;
+  border:2px solid rgba(37,211,102,.3);animation:fw-ring 2s ease-in-out infinite;
+}
+@keyframes fw-ring{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.2);opacity:0}}
+
+/* ═══════════════════════════════════════
+   MODAL — Premium with accent & icon
+═══════════════════════════════════════ */
+.modal-bg{
+  display:none;position:fixed;inset:0;z-index:10000;
+  background:rgba(0,0,0,.6);backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;padding:20px;
+}
+.modal-bg.open{display:flex}
+.modal-box{
+  background:#fff;border-radius:24px;padding:0 48px 48px;
+  width:100%;max-width:460px;position:relative;overflow:hidden;
+  animation:mIn .4s cubic-bezier(.25,.46,.45,.94);
+  box-shadow:0 32px 80px rgba(0,0,0,.25),0 0 0 1px rgba(0,0,0,.05);
+}
+@keyframes mIn{from{opacity:0;transform:scale(.92) translateY(24px)}to{opacity:1;transform:none}}
+.modal-accent{height:4px;background:linear-gradient(90deg,var(--em),var(--gold),var(--blue));margin:0 -48px 32px}
+.modal-close{
+  position:absolute;top:20px;right:20px;background:var(--off);border:none;
+  font-size:16px;cursor:pointer;color:var(--muted);transition:all .2s;
+  width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+}
+.modal-close:hover{color:#fff;background:var(--em)}
+.modal-head{text-align:center;margin-bottom:28px}
+.modal-ico{
+  width:56px;height:56px;border-radius:16px;margin:0 auto 16px;
+  background:linear-gradient(135deg,rgba(0,214,143,.12),rgba(0,184,122,.08));
+  border:1px solid rgba(0,214,143,.2);
+  display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--em);
+}
+.modal-box h3{font-family:var(--head);font-weight:800;font-size:24px;color:var(--ink);margin-bottom:6px}
+.modal-box .sub{font-size:13.5px;color:var(--muted)}
+.m-field{margin-bottom:14px}
+.m-field input,.m-field textarea{
+  width:100%;padding:13px 18px;border:1.5px solid var(--border);
+  border-radius:14px;font-family:var(--body);font-size:14px;
+  color:var(--ink);outline:none;background:#fafbff;
+  transition:border-color .2s,box-shadow .2s;
+}
+.m-field input:focus,.m-field textarea:focus{border-color:var(--em);box-shadow:0 0 0 3px rgba(0,214,143,.1)}
+.m-field textarea{height:80px;resize:none}
+.m-submit{
+  width:100%;padding:15px;border:none;border-radius:100px;margin-top:8px;
+  background:linear-gradient(135deg,var(--em),var(--em2));
+  color:var(--ink);font-family:var(--head);font-weight:700;font-size:15px;cursor:pointer;
+  box-shadow:0 6px 24px rgba(0,214,143,.35);transition:all .3s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.m-submit:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(0,214,143,.5)}
+
+/* ═══════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════ */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.rv.vi{opacity:1;transform:none}
+.rv-l{opacity:0;transform:translateX(-28px);transition:opacity .7s ease,transform .7s ease}
+.rv-l.vi{opacity:1;transform:none}
+.rv-r{opacity:0;transform:translateX(28px);transition:opacity .7s ease,transform .7s ease}
+.rv-r.vi{opacity:1;transform:none}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media(max-width:1200px){
+  #why{grid-template-columns:1fr}
+  .why-img-col{height:360px}
+  .why-img-col::after{background:linear-gradient(to bottom,rgba(4,8,15,.2),rgba(11,18,32,1))}
+  .why-float{bottom:20px;left:20px}
+  .auto-grid,.contact-grid,.about-wrap{grid-template-columns:1fr;gap:48px}
+  .ft-grid{grid-template-columns:1fr 1fr;gap:40px}
+  .feat-grid{grid-template-columns:repeat(2,1fr)}
+  .how-steps::before{display:none}
+  .how-steps{grid-template-columns:repeat(2,1fr);gap:28px}
+}
+@media(max-width:768px){
+  #topbar{display:none}
+  .n-links{display:none}
+  .ham{display:flex}
+  .ss-inner{grid-template-columns:1fr 1fr}
+  .ss-box{padding:28px 16px}
+  .feat-grid{grid-template-columns:1fr}
+  .how-steps{grid-template-columns:1fr}
+  .ft-grid{grid-template-columns:1fr;gap:36px}
+  .ft-cta-inner{flex-direction:column;text-align:center}
+  .ft-cta-left p{margin:0 auto}
+  .tcard{min-width:100%}
+  .abt-mosaic{height:300px}
+  .am.m3,.am.m4{display:none}
+  .cf-frow{grid-template-columns:1fr}
+  .ft-bottom{flex-direction:column;text-align:center}
+  .ft-disc{text-align:center;max-width:100%}
+  .float-widget{bottom:20px;right:16px}
+  .modal-box{padding:0 28px 28px;border-radius:20px}
+  .modal-accent{margin:0 -28px 24px}
+  .mob-links a{font-size:22px}
+}
+/* ═══════════════════════════════════════
+   HERO — QUANTUM PRECISION DESIGN
+═══════════════════════════════════════ */
+#hero{
+  position:relative;overflow:hidden;
+  background:#080c14;
+  min-height:calc(100vh - var(--nh));
+  display:flex;flex-direction:column;
+}
+.h-grid{
+  position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(0,162,255,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(0,162,255,.03) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+.h-glow{position:absolute;pointer-events:none;z-index:0;border-radius:50%;filter:blur(100px)}
+.h-glow-1{width:700px;height:700px;background:radial-gradient(circle,rgba(0,162,255,.13) 0%,transparent 70%);top:-150px;left:-150px}
+.h-glow-2{width:500px;height:500px;background:radial-gradient(circle,rgba(0,214,143,.09) 0%,transparent 70%);bottom:-50px;right:38%}
+.hero-body{
+  position:relative;z-index:5;flex:1;display:flex;align-items:center;
+  padding:80px 6vw 44px;gap:56px;
+  max-width:1380px;margin:0 auto;width:100%;
+}
+.hero-left{flex:1;max-width:600px}
+.h-label{
+  display:inline-flex;align-items:center;gap:10px;
+  color:rgba(255,255,255,.35);font-size:10.5px;
+  font-weight:600;letter-spacing:2.8px;text-transform:uppercase;
+  margin-bottom:28px;
+}
+.h-label::before{content:'';width:28px;height:1px;background:rgba(255,255,255,.25)}
+.hero-h1{
+  font-family:var(--head);font-weight:900;
+  font-size:clamp(34px,5vw,66px);line-height:1.03;
+  color:#fff;letter-spacing:-.01em;
+  text-transform:uppercase;margin-bottom:22px;
+}
+.hero-h1 em{
+  font-style:normal;
+  background:linear-gradient(90deg,#00a2ff,var(--em),var(--gold));
+  background-size:200% auto;
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:h1-sh 5s linear infinite;
+}
+@keyframes h1-sh{0%{background-position:0%}100%{background-position:200%}}
+.hero-sub{
+  font-size:clamp(14px,1.35vw,16.5px);color:rgba(255,255,255,.45);
+  line-height:1.9;max-width:490px;margin-bottom:38px;
+}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:44px}
+.btn-qp-primary{
+  display:inline-flex;align-items:center;gap:10px;
+  background:transparent;color:#fff;
+  border:1.5px solid rgba(255,255,255,.28);
+  font-family:var(--head);font-weight:700;
+  font-size:12.5px;letter-spacing:.8px;text-transform:uppercase;
+  padding:14px 30px;border-radius:5px;
+  cursor:pointer;text-decoration:none;position:relative;overflow:hidden;
+  transition:all .3s;
+}
+.btn-qp-primary::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,rgba(0,162,255,.18),rgba(0,214,143,.12));
+  opacity:0;transition:opacity .3s;
+}
+.btn-qp-primary:hover{border-color:rgba(0,162,255,.65);color:#60c8ff}
+.btn-qp-primary:hover::before{opacity:1}
+.btn-qp-secondary{
+  display:inline-flex;align-items:center;gap:10px;
+  background:rgba(255,255,255,.05);color:rgba(255,255,255,.5);
+  border:1.5px solid rgba(255,255,255,.08);
+  font-family:var(--head);font-weight:600;
+  font-size:12.5px;letter-spacing:.8px;text-transform:uppercase;
+  padding:14px 28px;border-radius:5px;
+  cursor:pointer;text-decoration:none;transition:all .3s;
+}
+.btn-qp-secondary:hover{color:#fff;border-color:rgba(255,255,255,.22)}
+/* Broker avatars */
+.h-avatars{display:flex;align-items:center;gap:14px;margin-bottom:32px}
+.h-av-row{display:flex}
+.h-av{
+  width:38px;height:38px;border-radius:50%;
+  border:2.5px solid #080c14;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:12px;margin-left:-10px;transition:transform .2s;
+}
+.h-av:first-child{margin-left:0}
+.h-av:hover{transform:scale(1.15);z-index:1}
+.h-av-1{background:#ef4444;color:#fff}
+.h-av-2{background:#8b5cf6;color:#fff}
+.h-av-3{background:#10b981;color:#fff}
+.h-av-4{background:#3b82f6;color:#fff}
+.h-av-5{background:#f59e0b;color:#fff}
+.h-av-txt strong{display:block;font-size:13px;color:rgba(255,255,255,.75);margin-bottom:2px}
+.h-av-txt{font-size:11.5px;color:rgba(255,255,255,.35);line-height:1.5}
+/* Bottom stat bar */
+.h-stat-bar{
+  display:flex;align-items:center;gap:12px;
+  padding-top:28px;border-top:1px solid rgba(255,255,255,.06);
+}
+.h-stat-dot{width:7px;height:7px;border-radius:50%;background:#00a2ff;box-shadow:0 0 10px #00a2ff;flex-shrink:0;animation:bk 2s ease-in-out infinite}
+@keyframes bk{0%,100%{opacity:1}50%{opacity:.3}}
+.h-stat-lbl{font-size:10.5px;color:rgba(255,255,255,.28);letter-spacing:2px;text-transform:uppercase}
+.h-stat-val{font-family:var(--head);font-weight:800;font-size:13px;color:rgba(255,255,255,.7);margin-left:4px}
+/* ── RIGHT VISUAL ── */
+.hero-visual{
+  flex-shrink:0;width:500px;height:500px;
+  position:relative;display:flex;align-items:center;justify-content:center;
+}
+.h-sphere,.h-sphere-2,.h-sphere-3{position:absolute;border-radius:50%;pointer-events:none}
+.h-sphere{
+  inset:0;
+  border:1px solid rgba(0,162,255,.14);
+  box-shadow:0 0 0 18px rgba(0,162,255,.035),0 0 0 55px rgba(0,162,255,.02),0 0 90px rgba(0,162,255,.09),inset 0 0 90px rgba(0,162,255,.04);
+  animation:spin1 22s linear infinite;
+}
+.h-sphere-2{inset:36px;border:1px solid rgba(0,214,143,.07);animation:spin1 14s linear infinite reverse}
+.h-sphere-3{inset:80px;border:1px solid rgba(0,162,255,.12);box-shadow:0 0 50px rgba(0,162,255,.09);animation:spin1 9s linear infinite}
+@keyframes spin1{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.h-node{position:absolute;border-radius:50%;background:#00a2ff;box-shadow:0 0 12px #00a2ff;animation:nd 2.2s ease-in-out infinite}
+@keyframes nd{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
+/* Floating card */
+.h-dash-card{
+  position:relative;z-index:3;
+  background:rgba(6,11,22,.88);
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:18px;backdrop-filter:blur(28px) saturate(1.8);
+  box-shadow:0 0 0 1px rgba(0,162,255,.08),0 40px 100px rgba(0,0,0,.75),0 0 70px rgba(0,162,255,.07);
+  width:310px;overflow:hidden;
+  animation:flt 7s ease-in-out infinite;
+}
+@keyframes flt{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+.hdc-header{
+  background:rgba(0,162,255,.05);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  padding:12px 16px;display:flex;align-items:center;gap:8px;
+}
+.hdc-dots{display:flex;gap:5px}
+.hdc-dot{width:9px;height:9px;border-radius:50%}
+.hdc-title{font-size:11px;color:rgba(255,255,255,.28);flex:1;text-align:center;letter-spacing:.4px}
+.hdc-live{display:flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;color:#34d399;letter-spacing:.5px}
+.hdc-live-dot{width:5px;height:5px;border-radius:50%;background:#34d399;animation:lp 1.4s ease-in-out infinite}
+@keyframes lp{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.2;transform:scale(1.7)}}
+.hdc-pnl{padding:16px 16px 8px}
+.hdc-pnl-lbl{font-size:10px;color:rgba(255,255,255,.22);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:4px}
+.hdc-pnl-val{font-family:var(--head);font-weight:900;font-size:30px;color:#34d399;line-height:1;margin-bottom:5px}
+.hdc-pnl-sub{font-size:11px;color:#34d399;opacity:.65;display:flex;align-items:center;gap:4px}
+.hdc-chart{padding:4px 16px 8px;height:70px}
+.hdc-chart svg{width:100%;height:100%}
+.hdc-line{stroke-dasharray:650;stroke-dashoffset:650;animation:dl 2s cubic-bezier(.4,0,.2,1) .5s forwards}
+@keyframes dl{to{stroke-dashoffset:0}}
+.hdc-trades{border-top:1px solid rgba(255,255,255,.05);padding:10px 16px}
+.hdc-trade{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.hdc-trade:last-child{border-bottom:none}
+.hdc-sym{font-family:var(--head);font-weight:700;font-size:11.5px;color:#fff;flex:1}
+.hdc-badge{font-size:8px;font-weight:800;padding:2px 6px;border-radius:3px;letter-spacing:.5px;margin-right:8px}
+.hdc-badge.b{background:rgba(52,211,153,.13);color:#34d399;border:1px solid rgba(52,211,153,.2)}
+.hdc-badge.s{background:rgba(248,113,113,.13);color:#f87171;border:1px solid rgba(248,113,113,.2)}
+.hdc-pl{font-family:var(--head);font-weight:700;font-size:12px}
+.hdc-pl.pos{color:#34d399}
+.hdc-pl.neg{color:#f87171}
+.hdc-foot{
+  border-top:1px solid rgba(255,255,255,.05);
+  padding:10px 16px;display:flex;justify-content:space-between;align-items:center;
+  background:rgba(0,0,0,.15);
+}
+.hdc-strats{font-size:11px;color:rgba(255,255,255,.28);display:flex;align-items:center;gap:6px}
+.hdc-strat-dot{width:5px;height:5px;border-radius:50%;background:var(--em)}
+.hdc-auto{display:inline-flex;align-items:center;gap:5px;background:rgba(0,214,143,.08);border:1px solid rgba(0,214,143,.15);border-radius:100px;padding:4px 10px;font-size:10px;font-weight:700;color:var(--em);letter-spacing:.3px}
+/* Floating chips */
+.h-chip{
+  position:absolute;z-index:4;
+  background:rgba(6,11,22,.92);border:1px solid rgba(255,255,255,.1);
+  backdrop-filter:blur(20px);border-radius:12px;padding:10px 14px;
+  box-shadow:0 8px 32px rgba(0,0,0,.5);
+}
+.h-chip-1{top:36px;left:-44px;animation:cf1 5.5s ease-in-out infinite}
+.h-chip-2{bottom:52px;right:-38px;animation:cf2 6.5s ease-in-out infinite}
+@keyframes cf1{0%,100%{transform:translateY(0)}50%{transform:translateY(-14px)}}
+@keyframes cf2{0%,100%{transform:translateY(0)}50%{transform:translateY(12px)}}
+.h-chip-val{font-family:var(--head);font-weight:900;font-size:17px;color:#fff;line-height:1}
+.h-chip-lbl{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px}
+/* Ticker */
+.h-ticker{
+  position:relative;z-index:6;
+  border-top:1px solid rgba(255,255,255,.05);
+  background:rgba(0,0,0,.4);backdrop-filter:blur(10px);
+  padding:10px 0;overflow:hidden;
+}
+.tk-track{display:flex;gap:56px;width:max-content;animation:tk 32s linear infinite}
+@keyframes tk{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.tk-item{font-size:12px;font-weight:500;color:rgba(255,255,255,.38);white-space:nowrap;display:flex;gap:7px;align-items:center}
+.tk-item .up{color:#34d399}
+.tk-item .dn{color:#f87171}
+.tk-divider{width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.15)}
+/* Responsive */
+@media(max-width:1100px){.hero-visual{display:none}.hero-left{max-width:100%}}
+@media(max-width:768px){.hero-body{padding:80px 5vw 44px}.hero-ctas{gap:12px}}
+
+/* ═══════════════════════════════════════
+   STATS STRIP
+═══════════════════════════════════════ */
+#stats-strip{
+  background:linear-gradient(135deg,#00b87a,#009966,#007a55);
+  padding:0;overflow:hidden;
+}
+.ss-inner{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  divide-x:1px solid rgba(255,255,255,.15);
+}
+.ss-box{
+  padding:42px 24px;text-align:center;
+  border-right:1px solid rgba(255,255,255,.12);
+  position:relative;overflow:hidden;
+  transition:background .3s;
+}
+.ss-box:last-child{border-right:none}
+.ss-box:hover{background:rgba(255,255,255,.06)}
+.ss-box::before{
+  content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:40px;height:2px;background:rgba(255,255,255,.3);
+}
+.ss-num{font-family:var(--head);font-weight:800;font-size:clamp(34px,4vw,52px);color:#fff;line-height:1}
+.ss-unit{font-size:.55em;opacity:.75}
+.ss-lbl{font-size:13px;color:rgba(255,255,255,.75);margin-top:6px;font-weight:400}
+
+/* ═══════════════════════════════════════
+   ABOUT
+═══════════════════════════════════════ */
+#about{padding:110px 5vw;background:#fff;overflow:hidden}
+.about-wrap{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+
+/* labels */
+.label{
+  display:inline-flex;align-items:center;gap:8px;
+  font-size:11px;font-weight:700;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--em2);margin-bottom:14px;
+}
+.label::before{content:'';width:24px;height:2px;background:var(--em2);border-radius:1px}
+.sec-title{font-family:var(--head);font-weight:800;font-size:clamp(26px,3vw,40px);color:var(--ink);line-height:1.18;margin-bottom:18px}
+.sec-body{font-size:15px;color:var(--muted);line-height:1.9;margin-bottom:14px}
+
+.abt-pts{display:flex;flex-direction:column;gap:16px;margin-top:28px}
+.abt-pt{display:flex;gap:14px;align-items:flex-start}
+.abt-pt-ico{
+  width:40px;height:40px;border-radius:11px;flex-shrink:0;
+  background:linear-gradient(135deg,rgba(0,214,143,.12),rgba(0,184,122,.08));
+  border:1px solid rgba(0,214,143,.2);
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+}
+.abt-pt-t{font-family:var(--head);font-weight:700;font-size:14.5px;color:var(--ink);margin-bottom:3px}
+.abt-pt-d{font-size:13px;color:var(--muted);line-height:1.6}
+
+.abt-nums{display:flex;gap:0;margin-top:40px;border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
+.abt-num{flex:1;padding:22px 20px;text-align:center;border-right:1px solid var(--border)}
+.abt-num:last-child{border-right:none}
+.abt-num-v{font-family:var(--head);font-weight:800;font-size:30px;color:var(--em2);line-height:1}
+.abt-num-l{font-size:12px;color:var(--muted);margin-top:4px}
+
+/* abt-right */
+.abt-right{position:relative}
+.abt-img-wrap{position:relative;border-radius:var(--r-xl);overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.12)}
+.abt-img-main{width:100%;height:auto;display:block;transform:scale(1.02);transition:transform 0.5s ease}
+.abt-img-wrap:hover .abt-img-main{transform:scale(1.05)}
+.abt-img-card{
+  position:absolute;bottom:30px;left:-30px;
+  background:#fff;border-radius:14px;padding:20px 24px;
+  box-shadow:0 16px 48px rgba(0,0,0,0.15);border:1px solid var(--border);
+  animation:ft 4s ease-in-out infinite;display:flex;align-items:center;gap:16px;z-index:10;
+}
+@media(max-width:768px){ .abt-img-card{left:10px;bottom:10px;padding:12px 16px} }
+.aic-icon{
+  width:48px;height:48px;border-radius:50%;background:rgba(0,214,143,0.1);
+  color:var(--em);display:flex;align-items:center;justify-content:center;font-size:20px;
+}
+.aic-val{font-family:var(--head);font-weight:800;font-size:24px;color:var(--ink);line-height:1}
+.aic-lbl{font-size:12px;color:var(--muted);margin-top:4px}
+@keyframes ft{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+/* broker strip */
+.broker-strip{margin-top:80px;text-align:center;padding-top:40px;border-top:1px solid var(--border)}
+.broker-title{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:24px;font-weight:600}
+.broker-track-wrap{overflow:hidden;mask-image:linear-gradient(90deg,transparent,black 15%,black 85%,transparent)}
+.broker-track{display:flex;gap:50px;width:max-content;animation:brkScroll 20s linear infinite}
+@keyframes brkScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.br-item{
+  display:flex;align-items:center;gap:10px;font-family:var(--head);
+  font-weight:700;font-size:18px;color:var(--ink2);opacity:0.6;
+  transition:all 0.3s;
+}
+.br-item:hover{opacity:1;color:var(--ink)}
+
+/* ═══════════════════════════════════════
+   WHY CHOOSE — SPLIT DARK
+═══════════════════════════════════════ */
+#why{display:grid;grid-template-columns:1fr 1.05fr;min-height:640px;overflow:hidden}
+
+.why-img-col{
+  position:relative;overflow:hidden;
+  background:url('https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=1200&q=80') center/cover;
+}
+.why-img-col::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to right,rgba(4,8,15,.3) 0%,rgba(11,18,32,1) 100%);
+}
+.why-float{
+  position:absolute;bottom:40px;left:40px;z-index:2;
+  background:rgba(255,255,255,.08);backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.12);border-radius:var(--r-lg);
+  padding:20px 24px;display:flex;gap:28px;
+}
+.wf-item .wf-val{font-family:var(--head);font-weight:800;font-size:22px;color:#fff}
+.wf-item .wf-lbl{font-size:11px;color:rgba(255,255,255,.5);margin-top:3px}
+
+.why-content{
+  background:var(--ink2);padding:80px 56px;
+  display:flex;flex-direction:column;justify-content:center;
+  background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,.03) 1px,transparent 0);
+  background-size:28px 28px;
+}
+.why-content .label{color:var(--em)}
+.why-content .label::before{background:var(--em)}
+.why-content .sec-title{color:#fff}
+.why-content .sec-body{color:rgba(255,255,255,.55);margin-bottom:40px}
+
+.why-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.wg-item{display:flex;gap:14px;align-items:flex-start}
+.wg-ico{
+  width:46px;height:46px;border-radius:12px;flex-shrink:0;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+  transition:all .35s;
+}
+.wg-item:hover .wg-ico{background:rgba(0,214,143,.12);border-color:rgba(0,214,143,.3);transform:scale(1.08)}
+.wg-t{font-family:var(--head);font-weight:700;font-size:14.5px;color:#fff;margin-bottom:5px}
+.wg-d{font-size:13px;color:rgba(255,255,255,.45);line-height:1.6}
+
+/* colored fa icons */
+.ic-em{color:var(--em)}
+.ic-gold{color:var(--gold)}
+.ic-blue{color:#60a5fa}
+.ic-pink{color:#f472b6}
+.ic-purple{color:#a78bfa}
+.ic-red{color:#fb7185}
+
+/* ═══════════════════════════════════════
+   FEATURES CARDS
+═══════════════════════════════════════ */
+#features{padding:110px 5vw;background:var(--off)}
+.feat-header{text-align:center;max-width:600px;margin:0 auto 64px}
+.feat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+
+.fc{
+  background:#fff;border:1px solid var(--border);border-radius:var(--r-xl);
+  padding:36px 28px;display:flex;flex-direction:column;
+  transition:all .35s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;
+}
+.fc::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--em),var(--gold));
+  transform:scaleX(0);transform-origin:left;transition:transform .35s;
+}
+.fc:hover{transform:translateY(-8px);box-shadow:0 24px 60px rgba(0,0,0,.09);border-color:transparent}
+.fc:hover::before{transform:scaleX(1)}
+.fc-num{
+  font-family:var(--head);font-weight:800;font-size:48px;
+  color:rgba(0,0,0,.04);line-height:1;margin-bottom:16px;
+  letter-spacing:-2px;
+}
+.fc-ico{font-size:28px;margin-bottom:16px}
+.fc-t{font-family:var(--head);font-weight:700;font-size:17px;color:var(--ink);margin-bottom:10px}
+.fc-d{font-size:13.5px;color:var(--muted);line-height:1.7;margin-bottom:auto}
+.fc-lnk{
+  display:inline-flex;align-items:center;gap:4px;
+  color:var(--em2);font-size:12px;font-weight:700;
+  text-decoration:none;text-transform:uppercase;letter-spacing:.8px;
+  margin-top:20px;transition:gap .2s;
+}
+.fc-lnk:hover{gap:8px}
+/* gradient card */
+.fc.fc-dark{
+  background:linear-gradient(145deg,var(--ink2),var(--ink3));
+  border-color:transparent;
+}
+.fc.fc-dark .fc-num{color:rgba(255,255,255,.04)}
+.fc.fc-dark .fc-t{color:#fff}
+.fc.fc-dark .fc-d{color:rgba(255,255,255,.5)}
+.fc.fc-dark .fc-lnk{color:var(--em)}
+
+/* ═══════════════════════════════════════
+   MINICTA — PARALLAX DARK
+═══════════════════════════════════════ */
+#minicta{
+  position:relative;overflow:hidden;min-height:520px;
+  display:flex;align-items:center;
+  background:url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1600&q=80') center/cover fixed;
+}
+.mc-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg,rgba(4,8,15,.95) 0%,rgba(4,8,15,.7) 60%,rgba(0,214,143,.08) 100%);
+}
+.mc-inner{
+  position:relative;z-index:2;padding:0 5vw;max-width:680px;
+}
+.mc-inner .label{color:var(--em)}
+.mc-inner .label::before{background:var(--em)}
+.mc-inner h2{font-family:var(--head);font-weight:800;font-size:clamp(28px,4vw,50px);color:#fff;line-height:1.15;margin-bottom:18px}
+.mc-inner p{font-size:16px;color:rgba(255,255,255,.65);line-height:1.8;margin-bottom:36px}
+.mc-form{display:flex;gap:10px;flex-wrap:wrap}
+.mc-inp{
+  flex:1;min-width:180px;padding:14px 20px;
+  background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.14);
+  border-radius:100px;color:#fff;font-family:var(--body);font-size:14px;outline:none;
+  transition:border-color .2s;
+}
+.mc-inp::placeholder{color:rgba(255,255,255,.35)}
+.mc-inp:focus{border-color:var(--em)}
+.mc-sub{
+  background:linear-gradient(135deg,var(--em),var(--em2));
+  color:var(--ink);font-family:var(--head);font-weight:700;font-size:14px;
+  padding:14px 30px;border-radius:100px;border:none;cursor:pointer;
+  white-space:nowrap;box-shadow:0 6px 20px rgba(0,214,143,.35);
+  transition:transform .2s,box-shadow .2s;
+}
+.mc-sub:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,214,143,.45)}
+
+/* ═══════════════════════════════════════
+   HOW IT WORKS
+═══════════════════════════════════════ */
+#how{padding:110px 5vw;background:#fff}
+.how-header{text-align:center;max-width:580px;margin:0 auto 72px}
+.how-steps{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:32px;position:relative;
+}
+/* connecting line */
+.how-steps::before{
+  content:'';position:absolute;top:44px;left:10%;right:10%;height:1.5px;
+  background:linear-gradient(90deg,var(--em),var(--gold),var(--blue));
+  z-index:0;opacity:.3;
+}
+.hstep{position:relative;z-index:1;text-align:center}
+.hstep-ico-wrap{
+  width:88px;height:88px;border-radius:50%;margin:0 auto 24px;
+  background:#fff;border:1.5px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:32px;
+  box-shadow:0 8px 28px rgba(0,0,0,.06);
+  transition:all .35s;position:relative;
+}
+.hstep:hover .hstep-ico-wrap{
+  background:linear-gradient(135deg,var(--em),var(--em2));
+  border-color:transparent;
+  box-shadow:0 12px 36px rgba(0,214,143,.3);
+  transform:scale(1.06);
+}
+.hstep:hover .hstep-ico-wrap i{color:#fff!important}
+.hstep-n{
+  position:absolute;top:-6px;right:-2px;
+  width:24px;height:24px;border-radius:50%;
+  background:var(--gold);color:var(--ink);
+  font-family:var(--head);font-weight:800;font-size:11px;
+  display:flex;align-items:center;justify-content:center;
+  border:2px solid #fff;box-shadow:0 2px 8px rgba(245,158,11,.4);
+}
+.hstep-t{font-family:var(--head);font-weight:700;font-size:16px;color:var(--ink);margin-bottom:10px}
+.hstep-d{font-size:13.5px;color:var(--muted);line-height:1.7}
+
+/* ═══════════════════════════════════════
+   AUTOMATE SECTION
+═══════════════════════════════════════ */
+#automate{background:var(--ink);padding:110px 5vw;color:#fff}
+.auto-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:80px;align-items:center}
+.auto-img-wrap{position:relative}
+.auto-img{
+  border-radius:var(--r-xl);overflow:hidden;
+  box-shadow:0 32px 80px rgba(0,0,0,.5);
+}
+.auto-img img{width:100%;display:block;animation:fimg 6s ease-in-out infinite}
+@keyframes fimg{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
+.auto-img-glow{
+  position:absolute;inset:-30px;z-index:-1;
+  background:radial-gradient(circle,rgba(0,214,143,.15) 0%,transparent 70%);
+  filter:blur(30px);
+}
+.auto-content .label{color:var(--em)}
+.auto-content .label::before{background:var(--em)}
+.auto-content .sec-title{color:#fff;margin-bottom:14px}
+.auto-content .sec-body{color:rgba(255,255,255,.55);margin-bottom:32px}
+.auto-checks{display:flex;flex-direction:column;gap:14px;margin-bottom:36px}
+.ach{display:flex;gap:14px;align-items:center;font-size:15px;color:rgba(255,255,255,.8)}
+.ach-ico{
+  width:24px;height:24px;border-radius:7px;flex-shrink:0;
+  background:rgba(0,214,143,.15);border:1px solid rgba(0,214,143,.3);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--em);font-size:11px;font-weight:900;
+}
+
+/* ═══════════════════════════════════════
+   CONTACT / FORM SECTION
+═══════════════════════════════════════ */
+#contact{
+  position:relative;overflow:hidden;
+  background:var(--ink3);padding:110px 5vw;color:#fff;
+}
+.contact-mesh{
+  position:absolute;inset:0;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,.04) 1px,transparent 0);
+  background-size:32px 32px;
+}
+.contact-glow{
+  position:absolute;top:-100px;right:-100px;
+  width:500px;height:500px;border-radius:50%;z-index:0;
+  background:radial-gradient(circle,rgba(0,214,143,.08) 0%,transparent 70%);
+}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;position:relative;z-index:2}
+.cf-left .sec-title{color:#fff;font-size:clamp(28px,3.5vw,46px);margin-bottom:20px}
+.cf-left .sec-title span{
+  background:linear-gradient(90deg,var(--em),var(--gold));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.cf-left .sec-body{color:rgba(255,255,255,.55);margin-bottom:36px;font-size:15.5px}
+.cf-pts{display:flex;flex-direction:column;gap:14px;margin-bottom:40px}
+.cf-pt{display:flex;gap:12px;align-items:center;font-size:15px;color:rgba(255,255,255,.8);font-weight:500}
+.cf-pt-ico{
+  width:22px;height:22px;border-radius:50%;background:var(--em);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--ink);font-size:10px;font-weight:900;flex-shrink:0;
+}
+
+/* form card */
+.cf-card{
+  background:#fff;border-radius:var(--r-xl);padding:48px;
+  box-shadow:0 32px 80px rgba(0,0,0,.4);
+}
+.cf-card h3{font-family:var(--head);font-weight:800;font-size:24px;color:var(--ink);margin-bottom:4px}
+.cf-card p{font-size:13.5px;color:var(--muted);margin-bottom:28px}
+.cf-frow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.cf-f{margin-bottom:16px}
+.cf-f label{display:block;font-size:12px;font-weight:700;color:var(--ink3);letter-spacing:.5px;margin-bottom:7px;text-transform:uppercase}
+.cf-f input,.cf-f textarea,.cf-f select{
+  width:100%;padding:13px 16px;border:1.5px solid var(--border);
+  border-radius:var(--r-md);font-family:var(--body);font-size:14px;
+  color:var(--ink);outline:none;background:#fafbff;
+  transition:border-color .2s,box-shadow .2s;
+}
+.cf-f input:focus,.cf-f textarea:focus,.cf-f select:focus{
+  border-color:var(--em2);box-shadow:0 0 0 3px rgba(0,214,143,.12);
+}
+.cf-f textarea{height:100px;resize:none}
+.cf-f select{cursor:pointer}
+.cf-submit{
+  width:100%;padding:15px;border:none;border-radius:100px;
+  background:linear-gradient(135deg,var(--ink2),var(--ink3));color:#fff;
+  font-family:var(--head);font-weight:700;font-size:15px;cursor:pointer;
+  margin-top:8px;transition:all .2s;
+  box-shadow:0 6px 20px rgba(0,0,0,.25);
+}
+.cf-submit:hover{background:linear-gradient(135deg,var(--em2),#009966);box-shadow:0 10px 28px rgba(0,214,143,.3);transform:translateY(-2px)}
+
+/* ═══════════════════════════════════════
+   TESTIMONIALS
+═══════════════════════════════════════ */
+#testi{padding:110px 5vw;background:var(--off)}
+.testi-hd{text-align:center;max-width:580px;margin:0 auto 60px}
+.testi-wrap{overflow:hidden;position:relative}
+.testi-track{display:flex;gap:22px;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.tcard{
+  background:#fff;border:1px solid var(--border);border-radius:var(--r-xl);
+  padding:34px 30px;flex-shrink:0;min-width:calc(33.333% - 15px);
+  transition:transform .3s,box-shadow .3s,border-color .3s;
+  position:relative;overflow:hidden;
+}
+.tcard::before{
+  content:'';position:absolute;top:0;left:0;width:4px;height:100%;
+  background:linear-gradient(180deg,var(--em),var(--gold));
+  border-radius:2px 0 0 2px;
+}
+.tcard:hover{transform:translateY(-6px);box-shadow:0 20px 48px rgba(0,0,0,.08);border-color:rgba(0,214,143,.2)}
+.tc-q{font-size:36px;color:rgba(0,214,143,.2);font-family:var(--head);font-weight:800;line-height:.8;margin-bottom:12px}
+.tc-text{font-size:14.5px;color:#374151;line-height:1.8;margin-bottom:24px;font-style:italic}
+.tc-stars{color:var(--gold);font-size:13px;letter-spacing:2px;margin-bottom:10px}
+.tc-auth{display:flex;align-items:center;gap:12px}
+.tc-av{
+  width:44px;height:44px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--head);font-weight:700;font-size:17px;color:#fff;
+}
+.tc-name{font-family:var(--head);font-weight:700;font-size:14px;color:var(--ink)}
+.tc-loc{font-size:12px;color:var(--muted);margin-top:2px}
+.testi-ctrl{display:flex;justify-content:center;align-items:center;gap:12px;margin-top:32px}
+.tarrow{
+  width:40px;height:40px;border-radius:50%;border:1.5px solid var(--border);
+  background:#fff;cursor:pointer;font-size:15px;color:var(--ink);
+  display:flex;align-items:center;justify-content:center;transition:all .2s;
+}
+.tarrow:hover{border-color:var(--em2);background:var(--em2);color:#fff}
+.testi-dots{display:flex;gap:6px}
+.tdot{width:7px;height:7px;border-radius:50%;border:none;padding:0;background:var(--border);cursor:pointer;transition:all .3s}
+.tdot.on{background:var(--em2);width:22px;border-radius:3px}
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+footer{background:var(--ink);padding:72px 5vw 0;color:rgba(255,255,255,.5)}
+.ft-grid{display:grid;grid-template-columns:2fr 1.1fr 1.1fr 1.4fr;gap:52px;padding-bottom:56px}
+.ft-brand p{font-size:13.5px;line-height:1.8;margin-top:16px;max-width:260px}
+.ft-socials{display:flex;gap:8px;margin-top:20px}
+.fsoc{
+  width:34px;height:34px;border-radius:8px;
+  border:1px solid rgba(255,255,255,.1);
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,.5);font-size:13px;text-decoration:none;
+  transition:all .2s;
+}
+.fsoc:hover{border-color:var(--em);color:var(--em);background:rgba(0,214,143,.08)}
+.ft-col h4{font-family:var(--head);font-weight:700;font-size:13.5px;color:#fff;margin-bottom:18px;letter-spacing:.3px}
+.ft-col ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.ft-col a{color:rgba(255,255,255,.5);text-decoration:none;font-size:13.5px;transition:color .2s;display:flex;align-items:center;gap:5px}
+.ft-col a:hover{color:var(--em)}
+.ft-contact-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:11px;font-size:13.5px}
+.fci-ico{
+  width:28px;height:28px;border-radius:7px;
+  background:rgba(0,214,143,.08);border:1px solid rgba(0,214,143,.15);
+  display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;color:var(--em);margin-top:1px;
+}
+.fci-v{color:rgba(255,255,255,.5)}
+.fci-v a{color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s}
+.fci-v a:hover{color:var(--em)}
+.ft-bottom{
+  border-top:1px solid rgba(255,255,255,.06);padding:22px 0;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:10px;font-size:12.5px;
+}
+.ft-bottom a{color:rgba(255,255,255,.4);text-decoration:none}
+.ft-bottom a:hover{color:var(--em)}
+.ft-disc{font-size:11px;color:rgba(255,255,255,.22);max-width:480px;line-height:1.6}
+
+/* ═══════════════════════════════════════
+   FLOATING WIDGET
+═══════════════════════════════════════ */
+.float-widget{
+  position:fixed;bottom:28px;right:28px;
+  display:flex;flex-direction:column;gap:10px;z-index:9999;
+}
+.fw-btn{
+  width:50px;height:50px;border-radius:50%;border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;color:#fff;
+  box-shadow:0 6px 20px rgba(0,0,0,.25);
+  transition:transform .2s,box-shadow .2s;text-decoration:none;
+}
+.fw-btn:hover{transform:scale(1.1);box-shadow:0 10px 28px rgba(0,0,0,.3)}
+.fw-call{background:linear-gradient(135deg,var(--em),var(--em2))}
+.fw-wa{background:linear-gradient(135deg,#25d366,#128c7e)}
+
+/* ═══════════════════════════════════════
+   MODAL
+═══════════════════════════════════════ */
+.modal-bg{
+  display:none;position:fixed;inset:0;z-index:10000;
+  background:rgba(0,0,0,.65);backdrop-filter:blur(6px);
+  align-items:center;justify-content:center;padding:20px;
+}
+.modal-bg.open{display:flex}
+.modal-box{
+  background:#fff;border-radius:var(--r-xl);padding:48px;
+  width:100%;max-width:460px;position:relative;
+  animation:mIn .3s ease;box-shadow:0 32px 80px rgba(0,0,0,.3);
+}
+@keyframes mIn{from{opacity:0;transform:scale(.93) translateY(20px)}to{opacity:1;transform:none}}
+.modal-close{
+  position:absolute;top:18px;right:22px;background:none;border:none;
+  font-size:20px;cursor:pointer;color:var(--muted);transition:color .2s;
+  width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+}
+.modal-close:hover{color:var(--ink);background:var(--off)}
+.modal-box h3{font-family:var(--head);font-weight:800;font-size:24px;color:var(--ink);margin-bottom:4px}
+.modal-box .sub{font-size:13.5px;color:var(--muted);margin-bottom:24px}
+.m-field{margin-bottom:14px}
+.m-field input,.m-field textarea{
+  width:100%;padding:12px 16px;border:1.5px solid var(--border);
+  border-radius:var(--r-md);font-family:var(--body);font-size:14px;
+  color:var(--ink);outline:none;background:#fafbff;transition:border-color .2s;
+}
+.m-field input:focus,.m-field textarea:focus{border-color:var(--em2)}
+.m-field textarea{height:80px;resize:none}
+.m-submit{
+  width:100%;padding:14px;border:none;border-radius:100px;margin-top:6px;
+  background:linear-gradient(135deg,var(--em),var(--em2));
+  color:var(--ink);font-family:var(--head);font-weight:700;font-size:15px;cursor:pointer;
+  box-shadow:0 6px 20px rgba(0,214,143,.35);transition:all .2s;
+}
+.m-submit:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,214,143,.45)}
+
+/* ═══════════════════════════════════════
+   MOB MENU
+═══════════════════════════════════════ */
+.mob-menu{
+  display:none;position:fixed;inset:0;z-index:990;
+  background:#fff;flex-direction:column;align-items:center;
+  justify-content:center;gap:22px;
+}
+.mob-menu.open{display:flex}
+.mob-menu a{
+  font-family:var(--head);font-weight:700;font-size:22px;
+  color:var(--ink);text-decoration:none;transition:color .2s;
+}
+.mob-menu a:hover{color:var(--em2)}
+.mob-close{
+  position:absolute;top:22px;right:5vw;background:none;
+  border:none;font-size:24px;cursor:pointer;color:var(--ink);
+}
+
+/* ═══════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════ */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease}
+.rv.vi{opacity:1;transform:none}
+.rv-l{opacity:0;transform:translateX(-28px);transition:opacity .7s ease,transform .7s ease}
+.rv-l.vi{opacity:1;transform:none}
+.rv-r{opacity:0;transform:translateX(28px);transition:opacity .7s ease,transform .7s ease}
+.rv-r.vi{opacity:1;transform:none}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media(max-width:1200px){
+  #why{grid-template-columns:1fr}
+  .why-img-col{height:360px}
+  .why-img-col::after{background:linear-gradient(to bottom,rgba(4,8,15,.2),rgba(11,18,32,1))}
+  .why-float{bottom:20px;left:20px}
+  .auto-grid,.contact-grid,.ft-grid,.about-wrap{grid-template-columns:1fr;gap:48px}
+  .feat-grid{grid-template-columns:repeat(2,1fr)}
+  .how-steps::before{display:none}
+  .how-steps{grid-template-columns:repeat(2,1fr);gap:28px}
+}
+@media(max-width:768px){
+  #topbar{display:none}
+  .n-links{display:none}
+  .n-cta{display:none}
+  .ham{display:flex}
+  .ss-inner{grid-template-columns:1fr 1fr}
+  .ss-box{padding:28px 16px}
+  .feat-grid{grid-template-columns:1fr}
+  .how-steps{grid-template-columns:1fr}
+  .ft-grid{grid-template-columns:1fr}
+  .tcard{min-width:100%}
+  .abt-mosaic{height:300px}
+  .am.m3,.am.m4{display:none}
+  .cf-frow{grid-template-columns:1fr}
+  .ft-bottom{flex-direction:column;text-align:center}
+  .ft-disc{text-align:center;max-width:100%}
+  .float-widget{bottom:20px;right:16px}
+}
+</style>
+</head>
+<body>
+
+<!-- Header loaded from header.html -->
+<div id="header-placeholder"></div>
+
+<!-- ────────── HERO ────────── -->
+<section id="hero">
+  <div class="h-grid"></div>
+  <div class="h-glow h-glow-1"></div>
+  <div class="h-glow h-glow-2"></div>
+
+  <div class="hero-body">
+    <!-- LEFT -->
+    <div class="hero-left">
+      <div class="h-label">LogicNes Techno &mdash; Algorithmic Trading Platform</div>
+
+      <h1 class="hero-h1">
+        Zero Emotion.<br>
+        Pure Precision.<br>
+        <em>Algo Superiority.</em>
+      </h1>
+
+      <p class="hero-sub">LogicNes Techno empowers traders with institutional-grade algorithmic software &mdash; automate complex strategies across 15+ brokers with millisecond precision, 24/7.</p>
+
+      <div class="hero-ctas">
+        <a href="#" onclick="openModal()" class="btn-qp-primary">Start Free Demo <i class="fa-solid fa-arrow-right fa-sm"></i></a>
+        <a href="about.html" class="btn-qp-secondary">View Platform</a>
+      </div>
+
+      <div class="h-avatars">
+        <div class="h-av-row">
+          <div class="h-av h-av-1">Z</div>
+          <div class="h-av h-av-2">U</div>
+          <div class="h-av h-av-3">A</div>
+          <div class="h-av h-av-4">F</div>
+          <div class="h-av h-av-5">D</div>
+        </div>
+        <div class="h-av-txt">
+          <strong>15+ Broker Integrations</strong>
+          Zerodha, Upstox, Angel One &amp; more
+        </div>
+      </div>
+
+      <div class="h-stat-bar">
+        <span class="h-stat-dot"></span>
+        <span class="h-stat-lbl">Executing Over</span>
+        <span class="h-stat-val">1,20,000+ Orders Daily</span>
+      </div>
+    </div>
+
+    <!-- RIGHT VISUAL -->
+    <div class="hero-visual">
+      <div class="h-sphere"></div>
+      <div class="h-sphere-2"></div>
+      <div class="h-sphere-3"></div>
+      <div class="h-node" style="width:8px;height:8px;top:62px;left:51%;animation-delay:.4s"></div>
+      <div class="h-node" style="width:6px;height:6px;top:31%;right:58px;background:#00d68f;box-shadow:0 0 9px #00d68f;animation-delay:.9s"></div>
+      <div class="h-node" style="width:10px;height:10px;bottom:76px;left:42%;animation-delay:1.3s"></div>
+      <div class="h-node" style="width:5px;height:5px;top:47%;left:52px;animation-delay:.2s"></div>
+      <div class="h-node" style="width:7px;height:7px;bottom:31%;right:75px;background:var(--gold);box-shadow:0 0 9px var(--gold);animation-delay:1.7s"></div>
+
+      <!-- Floating dashboard card -->
+      <div class="h-dash-card">
+        <div class="hdc-header">
+          <div class="hdc-dots">
+            <div class="hdc-dot" style="background:#ff5f57"></div>
+            <div class="hdc-dot" style="background:#ffbd2e"></div>
+            <div class="hdc-dot" style="background:#28ca41"></div>
+          </div>
+          <span class="hdc-title">LogicNes Terminal</span>
+          <div class="hdc-live"><span class="hdc-live-dot"></span>LIVE</div>
+        </div>
+
+        <div class="hdc-pnl">
+          <div class="hdc-pnl-lbl">Today's P&amp;L</div>
+          <div class="hdc-pnl-val">+&#x20B9;24,680</div>
+          <div class="hdc-pnl-sub"><i class="fa-solid fa-caret-up fa-xs"></i> +12.4% today</div>
+        </div>
+
+        <div class="hdc-chart">
+          <svg viewBox="0 0 280 60" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="hcg" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#34d399" stop-opacity=".28"/>
+                <stop offset="100%" stop-color="#34d399" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <path d="M0,45 L25,38 L55,42 L80,30 L110,34 L140,22 L165,26 L195,14 L220,18 L250,8 L280,4 L280,60 L0,60 Z" fill="url(#hcg)"/>
+            <path class="hdc-line" d="M0,45 L25,38 L55,42 L80,30 L110,34 L140,22 L165,26 L195,14 L220,18 L250,8 L280,4" fill="none" stroke="#34d399" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+
+        <div class="hdc-trades">
+          <div class="hdc-trade">
+            <span class="hdc-sym">NIFTY 50</span>
+            <span class="hdc-badge b">BUY</span>
+            <span class="hdc-pl pos">+&#x20B9;8,240</span>
+          </div>
+          <div class="hdc-trade">
+            <span class="hdc-sym">BANKNIFTY</span>
+            <span class="hdc-badge b">BUY</span>
+            <span class="hdc-pl pos">+&#x20B9;12,180</span>
+          </div>
+          <div class="hdc-trade">
+            <span class="hdc-sym">RELIANCE</span>
+            <span class="hdc-badge s">SELL</span>
+            <span class="hdc-pl neg">-&#x20B9;4,260</span>
+          </div>
+        </div>
+
+        <div class="hdc-foot">
+          <div class="hdc-strats"><span class="hdc-strat-dot"></span>3 Active Strategies</div>
+          <div class="hdc-auto"><i class="fa-solid fa-robot fa-xs"></i> AUTO ON</div>
+        </div>
+      </div>
+
+      <!-- Floating chips -->
+      <div class="h-chip h-chip-1">
+        <div class="h-chip-val">99.9<span style="font-size:11px;color:rgba(255,255,255,.4)">%</span></div>
+        <div class="h-chip-lbl">System Uptime</div>
+      </div>
+      <div class="h-chip h-chip-2">
+        <div class="h-chip-val">&lt;50<span style="font-size:11px;color:rgba(255,255,255,.4)">ms</span></div>
+        <div class="h-chip-lbl">Execution Speed</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ticker -->
+  <div class="h-ticker">
+    <div class="tk-track">
+      <span class="tk-item">NIFTY 50 <span class="up"><i class="fa-solid fa-caret-up fa-xs"></i> 24,628 (+0.68%)</span></span>
+      <div class="tk-divider"></div>
+      <span class="tk-item">BANKNIFTY <span class="up"><i class="fa-solid fa-caret-up fa-xs"></i> 52,874 (+0.92%)</span></span>
+      <div class="tk-divider"></div>
+      <span class="tk-item">SENSEX <span class="up"><i class="fa-solid fa-caret-up fa-xs"></i> 81,247 (+0.73%)</span></span>
+      <div class="tk-divider"></div>
+      <span class="tk-item">RELIANCE <span class="dn"><i class="fa-solid fa-caret-down fa-xs"></i> 1,412 (-0.21%)</span></span>
+      <div class="tk-divider"></div>
+      <span class="tk-item">TCS <span class="up"><i class="fa-solid fa-caret-up fa-xs"></i> 3,628 (+1.04%)</span></span>
+      <div class="tk-divider"></div>
+      <span class="tk-item">INFOSYS <span class="up"><i class="fa-solid fa-caret-up fa-xs"></i> 1,741 (+0.55%)</span></span>
+      <div class="tk-divider"></div>
+      <span class="tk-item">HDFC BANK <span class="dn"><i class="fa-solid fa-caret-down fa-xs"></i> 1,673 (-0.33%)</span></span>
+      <div class="tk-divider"></div>
+      <span class="tk-item">ICICI BANK <span class="up"><i class="fa-solid fa-caret-up fa-xs"></i> 1,248 (+0.88%)</span></span>
+      <div class="tk-divider"></div>
+      <span class="tk-item">NIFTY 50 <span class="up"><i class="fa-solid fa-caret-up fa-xs"></i> 24,628 (+0.68%)</span></span>
+      <div class="tk-divider"></div>
+      <span class="tk-item">BANKNIFTY <span class="up"><i class="fa-solid fa-caret-up fa-xs"></i> 52,874 (+0.92%)</span></span>
+      <div class="tk-divider"></div>
+      <span class="tk-item">SENSEX <span class="up"><i class="fa-solid fa-caret-up fa-xs"></i> 81,247 (+0.73%)</span></span>
+      <div class="tk-divider"></div>
+      <span class="tk-item">RELIANCE <span class="dn"><i class="fa-solid fa-caret-down fa-xs"></i> 1,412 (-0.21%)</span></span>
+      <div class="tk-divider"></div>
+      <span class="tk-item">TCS <span class="up"><i class="fa-solid fa-caret-up fa-xs"></i> 3,628 (+1.04%)</span></span>
+      <div class="tk-divider"></div>
+      <span class="tk-item">INFOSYS <span class="up"><i class="fa-solid fa-caret-up fa-xs"></i> 1,741 (+0.55%)</span></span>
+      <div class="tk-divider"></div>
+      <span class="tk-item">HDFC BANK <span class="dn"><i class="fa-solid fa-caret-down fa-xs"></i> 1,673 (-0.33%)</span></span>
+      <div class="tk-divider"></div>
+      <span class="tk-item">ICICI BANK <span class="up"><i class="fa-solid fa-caret-up fa-xs"></i> 1,248 (+0.88%)</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div id="stats-strip">
+  <div class="ss-inner">
+    <div class="ss-box rv"><div class="ss-num"><span id="st1">0</span><span class="ss-unit">k +</span></div><div class="ss-lbl">Orders Executed</div></div>
+    <div class="ss-box rv" style="transition-delay:.08s"><div class="ss-num"><span id="st2">0</span><span class="ss-unit">%</span></div><div class="ss-lbl">System Uptime</div></div>
+    <div class="ss-box rv" style="transition-delay:.16s"><div class="ss-num"><span id="st3">0</span><span class="ss-unit">+</span></div><div class="ss-lbl">Years of Excellence</div></div>
+    <div class="ss-box rv" style="transition-delay:.24s"><div class="ss-num"><span id="st4">0</span><span class="ss-unit">+</span></div><div class="ss-lbl">Strategies Automated</div></div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-wrap">
+    <div class="rv-l">
+      <div class="label">About Us</div>
+      <h2 class="sec-title">Built for Performance.<br>Driven by Discipline.</h2>
+      <p class="sec-body">At <strong>LogicNes Techno</strong>, we combine institutional-grade technology with a trader-first approach. We believe trading should be <strong>simple, smart, and stress-free</strong>. Remove emotional trading decisions and let our intelligent algorithms handle your execution.</p>
+      <div class="abt-pts">
+        <div class="abt-pt">
+          <div class="abt-pt-ico"><i class="fa-solid fa-bolt ic-em"></i></div>
+          <div><div class="abt-pt-t">Sub-Millisecond Execution</div><div class="abt-pt-d">Instant, latency-free order placement designed to capture every market opportunity without delay.</div></div>
+        </div>
+        <div class="abt-pt">
+          <div class="abt-pt-ico"><i class="fa-solid fa-code ic-blue"></i></div>
+          <div><div class="abt-pt-t">Zero Coding Required</div><div class="abt-pt-d">A powerful, intuitive platform that lets you automate complex strategies with zero programming knowledge.</div></div>
+        </div>
+        <div class="abt-pt">
+          <div class="abt-pt-ico"><i class="fa-solid fa-handshake ic-gold"></i></div>
+          <div><div class="abt-pt-t">Seamless Broker Integration</div><div class="abt-pt-d">Secure APIs connect you directly to India's leading brokers like Zerodha, Upstox, and Angel One.</div></div>
+        </div>
+      </div>
+      <div class="abt-nums">
+        <div class="abt-num"><div class="abt-num-v"><span id="an1">0</span>+</div><div class="abt-num-l">Ready Strategies</div></div>
+        <div class="abt-num"><div class="abt-num-v"><span id="an2">0</span>+</div><div class="abt-num-l">Active Traders</div></div>
+        <div class="abt-num"><div class="abt-num-v"><span id="an3">0</span>+</div><div class="abt-num-l">Supported Brokers</div></div>
+      </div>
+    </div>
+    <div class="abt-right rv-r">
+      <div class="abt-img-wrap">
+        <img src="about-trader.png" alt="Professional Trading Environment" class="abt-img-main">
+        <div class="abt-img-card">
+           <div class="aic-icon"><i class="fa-solid fa-robot"></i></div>
+           <div class="aic-text">
+             <div class="aic-val">100%</div>
+             <div class="aic-lbl">Automated Execution</div>
+           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Broker Strip Overlay/Carousel -->
+  <div class="broker-strip rv">
+    <p class="broker-title">Connect securely with India's leading brokerage platforms</p>
+    <div class="broker-track-wrap">
+       <div class="broker-track">
+         <div class="br-item"><i class="fa-solid fa-building-columns"></i> Zerodha</div>
+         <div class="br-item"><i class="fa-solid fa-chart-pie"></i> Upstox</div>
+         <div class="br-item"><i class="fa-solid fa-arrow-trend-up"></i> Angel One</div>
+         <div class="br-item"><i class="fa-solid fa-building"></i> Kotak Sec</div>
+         <div class="br-item"><i class="fa-solid fa-chart-line"></i> Dhan</div>
+         <div class="br-item"><i class="fa-solid fa-money-bill-trend-up"></i> Fyers</div>
+         <!-- duplicate for continuous scrolling -->
+         <div class="br-item"><i class="fa-solid fa-building-columns"></i> Zerodha</div>
+         <div class="br-item"><i class="fa-solid fa-chart-pie"></i> Upstox</div>
+         <div class="br-item"><i class="fa-solid fa-arrow-trend-up"></i> Angel One</div>
+         <div class="br-item"><i class="fa-solid fa-building"></i> Kotak Sec</div>
+         <div class="br-item"><i class="fa-solid fa-chart-line"></i> Dhan</div>
+         <div class="br-item"><i class="fa-solid fa-money-bill-trend-up"></i> Fyers</div>
+       </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- WHY CHOOSE — SPLIT DARK -->
+<section id="why">
+  <div class="why-img-col rv-l">
+    <div class="why-float">
+      <div class="wf-item"><div class="wf-val">99.9%</div><div class="wf-lbl">Uptime</div></div>
+      <div style="width:1px;background:rgba(255,255,255,.15)"></div>
+      <div class="wf-item"><div class="wf-val">5000+</div><div class="wf-lbl">Traders</div></div>
+      <div style="width:1px;background:rgba(255,255,255,.15)"></div>
+      <div class="wf-item"><div class="wf-val">15+</div><div class="wf-lbl">Brokers</div></div>
+    </div>
+  </div>
+  <div class="why-content rv-r">
+    <div class="label">Why Choose Us</div>
+    <h2 class="sec-title">Smarter Trading, Backed by Simplicity &amp; Safety</h2>
+    <p class="sec-body">We don't just offer automation — we deliver <strong style="color:var(--em)">speed, safety, and simplicity</strong> that every trader needs. Control risk better, focus on strategies, and let us handle flawless execution.</p>
+    <div class="why-grid">
+      <div class="wg-item">
+        <div class="wg-ico"><i class="fa-solid fa-wand-magic-sparkles ic-em"></i></div>
+        <div><div class="wg-t">Instant Execution</div><div class="wg-d">Signals convert to trades in milliseconds — zero delays.</div></div>
+      </div>
+      <div class="wg-item">
+        <div class="wg-ico"><i class="fa-solid fa-shield-halved ic-pink"></i></div>
+        <div><div class="wg-t">Strong Risk Controls</div><div class="wg-d">Daily stop-loss &amp; order limits safeguard your capital 24/7.</div></div>
+      </div>
+      <div class="wg-item">
+        <div class="wg-ico"><i class="fa-solid fa-code ic-blue"></i></div>
+        <div><div class="wg-t">No-Code Platform</div><div class="wg-d">Simple setup, zero coding skills needed — ever.</div></div>
+      </div>
+      <div class="wg-item">
+        <div class="wg-ico"><i class="fa-solid fa-headset ic-gold"></i></div>
+        <div><div class="wg-t">Expert Support</div><div class="wg-d">Real human assistance — not bots, not FAQs.</div></div>
+      </div>
+      <div class="wg-item">
+        <div class="wg-ico"><i class="fa-solid fa-bell ic-gold"></i></div>
+        <div><div class="wg-t">Live Alerts</div><div class="wg-d">Instant updates on every trade &amp; risk event to your phone.</div></div>
+      </div>
+      <div class="wg-item">
+        <div class="wg-ico"><i class="fa-solid fa-chart-line ic-em"></i></div>
+        <div><div class="wg-t">Proven Reliability</div><div class="wg-d">99.9% uptime — smooth, uninterrupted trading always.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES CARDS -->
+<section id="features">
+  <div class="feat-header rv">
+    <div class="label" style="justify-content:center">Our Features</div>
+    <h2 class="sec-title">Advanced Trading Solutions</h2>
+    <p class="sec-body" style="margin-top:12px;text-align:center">Purpose-built tools giving retail traders the power of institutional algorithms — without the complexity.</p>
+  </div>
+  <div class="feat-grid">
+    <div class="fc fc-dark rv">
+      <div class="fc-num">01</div>
+      <div class="fc-ico"><i class="fa-solid fa-rotate" style="color:var(--em)"></i></div>
+      <div class="fc-t">Automated Trading</div>
+      <div class="fc-d">Fully automated trading platform with no manual intervention. Set it once, let it trade forever.</div>
+      <a href="#" onclick="openModal()" class="fc-lnk" style="color:var(--em)">Know More <i class="fa-solid fa-arrow-right fa-xs"></i></a>
+    </div>
+    <div class="fc rv" style="transition-delay:.07s">
+      <div class="fc-num">02</div>
+      <div class="fc-ico"><i class="fa-solid fa-chess-queen" style="color:var(--em2)"></i></div>
+      <div class="fc-t">Proven Strategies</div>
+      <div class="fc-d">Access backtested and real-time strategies for consistent performance across all market conditions.</div>
+      <a href="#" onclick="openModal()" class="fc-lnk">Know More <i class="fa-solid fa-arrow-right fa-xs"></i></a>
+    </div>
+    <div class="fc rv" style="transition-delay:.14s">
+      <div class="fc-num">03</div>
+      <div class="fc-ico"><i class="fa-solid fa-shield-halved" style="color:var(--blue)"></i></div>
+      <div class="fc-t">Secure &amp; Reliable</div>
+      <div class="fc-d">Trade confidently with bank-level encryption and rock-solid infrastructure with 99.9% uptime.</div>
+      <a href="#" onclick="openModal()" class="fc-lnk">Know More <i class="fa-solid fa-arrow-right fa-xs"></i></a>
+    </div>
+    <div class="fc fc-dark rv" style="transition-delay:.21s">
+      <div class="fc-num">04</div>
+      <div class="fc-ico"><i class="fa-solid fa-gears" style="color:var(--gold)"></i></div>
+      <div class="fc-t">Seamless API Integration</div>
+      <div class="fc-d">Connect Zerodha, Upstox, Angel One, Fyers &amp; 15+ more brokers in minutes. Multi-account support.</div>
+      <a href="#" onclick="openModal()" class="fc-lnk" style="color:var(--em)">Know More <i class="fa-solid fa-arrow-right fa-xs"></i></a>
+    </div>
+    <div class="fc rv" style="transition-delay:.07s">
+      <div class="fc-num">05</div>
+      <div class="fc-ico"><i class="fa-solid fa-brain" style="color:#a78bfa"></i></div>
+      <div class="fc-t">Emotionless Trading</div>
+      <div class="fc-d">Algo software executes with zero emotion — no fear, no greed, no revenge trading, ever.</div>
+      <a href="#" onclick="openModal()" class="fc-lnk">Know More <i class="fa-solid fa-arrow-right fa-xs"></i></a>
+    </div>
+    <div class="fc rv" style="transition-delay:.14s">
+      <div class="fc-num">06</div>
+      <div class="fc-ico"><i class="fa-solid fa-chart-column" style="color:var(--em2)"></i></div>
+      <div class="fc-t">Intraday Trading</div>
+      <div class="fc-d">100% intraday trades with precisely defined entry, target, and stop loss on every single position.</div>
+      <a href="#" onclick="openModal()" class="fc-lnk">Know More <i class="fa-solid fa-arrow-right fa-xs"></i></a>
+    </div>
+    <div class="fc rv" style="transition-delay:.21s">
+      <div class="fc-num">07</div>
+      <div class="fc-ico"><i class="fa-solid fa-rocket" style="color:var(--gold)"></i></div>
+      <div class="fc-t">Fast &amp; Accurate</div>
+      <div class="fc-d">Millisecond execution with institutional-grade accuracy. Never miss a signal again.</div>
+      <a href="#" onclick="openModal()" class="fc-lnk">Know More <i class="fa-solid fa-arrow-right fa-xs"></i></a>
+    </div>
+    <div class="fc rv" style="transition-delay:.28s">
+      <div class="fc-num">08</div>
+      <div class="fc-ico"><i class="fa-solid fa-user-tie" style="color:var(--blue)"></i></div>
+      <div class="fc-t">Dedicated Manager</div>
+      <div class="fc-d">Get a personal account manager for expert guidance tailored to your specific trading goals.</div>
+      <a href="#" onclick="openModal()" class="fc-lnk">Know More <i class="fa-solid fa-arrow-right fa-xs"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- MINI CTA -->
+<section id="minicta">
+  <div class="mc-overlay"></div>
+  <div class="mc-inner rv">
+    <div class="label">Ready to Trade Smarter?</div>
+    <h2>Experience Seamless Algo Trading Today</h2>
+    <p>Take the next step toward smarter trading. Connect your broker, deploy intelligent strategies, and let advanced algorithms handle execution — while you watch in real time.</p>
+    <div class="mc-form">
+      <input class="mc-inp" type="text" placeholder="Your Name" id="mc-name">
+      <input class="mc-inp" type="tel" placeholder="Contact Number" id="mc-phone">
+      <button class="mc-sub" onclick="handleMC()">Request a Call Back</button>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="how-header rv">
+    <div class="label" style="justify-content:center">Our Process</div>
+    <h2 class="sec-title">How It Works</h2>
+    <p class="sec-body" style="text-align:center;margin-top:12px">Simple, fast, and beginner-friendly — everything you need to start trading smarter in minutes.</p>
+  </div>
+  <div class="how-steps">
+    <div class="hstep rv">
+      <div class="hstep-ico-wrap">
+        <i class="fa-solid fa-user-gear fa-2x ic-em"></i>
+        <div class="hstep-n">1</div>
+      </div>
+      <div class="hstep-t">Sign Up &amp; Set Up</div>
+      <div class="hstep-d">Create your account in minutes and customise your trading preferences — no coding required.</div>
+    </div>
+    <div class="hstep rv" style="transition-delay:.1s">
+      <div class="hstep-ico-wrap">
+        <i class="fa-solid fa-link fa-2x ic-blue"></i>
+        <div class="hstep-n">2</div>
+      </div>
+      <div class="hstep-t">Connect Your Broker</div>
+      <div class="hstep-d">Easily link your existing trading account to start executing trades from our secure platform.</div>
+    </div>
+    <div class="hstep rv" style="transition-delay:.2s">
+      <div class="hstep-ico-wrap">
+        <i class="fa-solid fa-diagram-project fa-2x ic-gold"></i>
+        <div class="hstep-n">3</div>
+      </div>
+      <div class="hstep-t">Configure Strategy</div>
+      <div class="hstep-d">Choose ready-made strategies or define your own rules — entry, exit, risk parameters.</div>
+    </div>
+    <div class="hstep rv" style="transition-delay:.3s">
+      <div class="hstep-ico-wrap">
+        <i class="fa-solid fa-chart-column fa-2x" style="color:#a78bfa"></i>
+        <div class="hstep-n">4</div>
+      </div>
+      <div class="hstep-t">Trade With Confidence</div>
+      <div class="hstep-d">Let automation handle execution. Get real-time alerts and track performance — anytime, anywhere.</div>
+    </div>
+  </div>
+</section>
+
+<!-- AUTOMATE -->
+<section id="automate">
+  <div class="auto-grid">
+    <div class="auto-img-wrap rv-l">
+      <div class="auto-img-glow"></div>
+      <div class="auto-img">
+        <img src="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?w=900&q=80" alt="Algo Trading">
+      </div>
+    </div>
+    <div class="auto-content rv-r">
+      <div class="label">Ready to Automate?</div>
+      <h2 class="sec-title">Ready to Automate Your Trading Journey</h2>
+      <p class="sec-body">Take the first step towards stress-free, intelligent trading. Whether you're a beginner or an experienced trader, LogicNes Techno helps you trade smarter — with real results.</p>
+      <div class="auto-checks">
+        <div class="ach"><div class="ach-ico"><i class="fa-solid fa-check"></i></div>No technical skills needed — get set up in under 15 minutes</div>
+        <div class="ach"><div class="ach-ico"><i class="fa-solid fa-check"></i></div>Works with all major Indian brokers seamlessly</div>
+        <div class="ach"><div class="ach-ico"><i class="fa-solid fa-check"></i></div>Full Pro platform access during your free 7-day trial</div>
+      </div>
+      <a href="#" onclick="openModal()" class="btn-em">Get Started Free <i class="fa-solid fa-arrow-right fa-sm"></i></a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-mesh"></div>
+  <div class="contact-glow"></div>
+  <div class="contact-grid">
+    <div class="cf-left rv-l">
+      <h2 class="sec-title">Ready to Automate Your <span>Trading Journey</span></h2>
+      <p class="sec-body">Take the first step towards stress-free, intelligent trading. Whether you're a beginner or an experienced trader, LogicNes Techno helps you trade smarter — with real results.</p>
+      <div class="cf-pts">
+        <div class="cf-pt"><div class="cf-pt-ico"><i class="fa-solid fa-check fa-xs"></i></div>No technical skills needed</div>
+        <div class="cf-pt"><div class="cf-pt-ico"><i class="fa-solid fa-check fa-xs"></i></div>Works with all top Indian brokers</div>
+        <div class="cf-pt"><div class="cf-pt-ico"><i class="fa-solid fa-check fa-xs"></i></div>Full access during free trial — no card required</div>
+      </div>
+      <div style="display:flex;gap:24px;margin-top:8px;flex-wrap:wrap">
+        <div>
+          <div style="font-family:var(--head);font-weight:800;font-size:34px;color:var(--em)">5,000+</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.45);margin-top:4px">Active Traders</div>
+        </div>
+        <div style="width:1px;background:rgba(255,255,255,.1)"></div>
+        <div>
+          <div style="font-family:var(--head);font-weight:800;font-size:34px;color:var(--gold)">99.9%</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.45);margin-top:4px">Platform Uptime</div>
+        </div>
+        <div style="width:1px;background:rgba(255,255,255,.1)"></div>
+        <div>
+          <div style="font-family:var(--head);font-weight:800;font-size:34px;color:var(--blue)">15+</div>
+          <div style="font-size:13px;color:rgba(255,255,255,.45);margin-top:4px">Broker Integrations</div>
+        </div>
+      </div>
+    </div>
+    <div class="rv-r">
+      <div class="cf-card">
+        <h3>Get Free Demo Now!</h3>
+        <p>Fill in your details — our team will reach out within 2 hours.</p>
+        <form onsubmit="return handleCF(event)">
+          <div class="cf-frow">
+            <div class="cf-f"><label>Name</label><input type="text" placeholder="Rahul Sharma" required></div>
+            <div class="cf-f"><label>Phone</label><input type="tel" placeholder="+91 98765 43210" required></div>
+          </div>
+          <div class="cf-f"><label>Email</label><input type="email" placeholder="rahul@example.com" required></div>
+          <div class="cf-f">
+            <label>Interested In</label>
+            <select>
+              <option>Free Demo</option>
+              <option>Starter Plan</option>
+              <option>Pro Plan</option>
+              <option>Enterprise</option>
+            </select>
+          </div>
+          <div class="cf-f"><label>Message</label><textarea placeholder="Tell us about your trading goals..."></textarea></div>
+          <button type="submit" class="cf-submit">Submit Enquiry</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testi">
+  <div class="testi-hd rv">
+    <div class="label" style="justify-content:center">Testimonials</div>
+    <h2 class="sec-title">Trusted by Traders, Backed by Results</h2>
+    <p class="sec-body" style="text-align:center;margin-top:12px"><strong>Trusted by Traders Across India</strong> — our platform has helped beginners and professionals alike trade smarter, safer, and with complete confidence.</p>
+  </div>
+  <div class="testi-wrap rv">
+    <div class="testi-track" id="ttrack">
+      <div class="tcard">
+        <div class="tc-q">"</div>
+        <div class="tc-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+        <div class="tc-text">LogicNes Techno made automation so simple. I no longer worry about missing entries or exits. The system handles everything flawlessly.</div>
+        <div class="tc-auth"><div class="tc-av" style="background:linear-gradient(135deg,var(--em2),#009966)">R</div><div><div class="tc-name">Rohit S.</div><div class="tc-loc">Delhi · Options Trader</div></div></div>
+      </div>
+      <div class="tcard">
+        <div class="tc-q">"</div>
+        <div class="tc-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+        <div class="tc-text">The built-in risk controls give me peace of mind. Finally, I trade without stress. My drawdown went from 18% to under 4% since I switched.</div>
+        <div class="tc-auth"><div class="tc-av" style="background:linear-gradient(135deg,#f97316,#f59e0b)">M</div><div><div class="tc-name">Meena P.</div><div class="tc-loc">Mumbai · Swing Trader</div></div></div>
+      </div>
+      <div class="tcard">
+        <div class="tc-q">"</div>
+        <div class="tc-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+        <div class="tc-text">The onboarding was quick and their team guided me step by step. Best algo platform I've used in my 7 years of trading — bar none.</div>
+        <div class="tc-auth"><div class="tc-av" style="background:linear-gradient(135deg,#7c3aed,#6d28d9)">A</div><div><div class="tc-name">Arjun K.</div><div class="tc-loc">Bangalore · SEBI Advisor</div></div></div>
+      </div>
+      <div class="tcard">
+        <div class="tc-q">"</div>
+        <div class="tc-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+        <div class="tc-text">Backtesting saved me from deploying two losing strategies. Now I only go live with confidence — and the results have been phenomenal.</div>
+        <div class="tc-auth"><div class="tc-av" style="background:linear-gradient(135deg,#059669,#10b981)">S</div><div><div class="tc-name">Sneha R.</div><div class="tc-loc">Pune · Equity Trader</div></div></div>
+      </div>
+      <div class="tcard">
+        <div class="tc-q">"</div>
+        <div class="tc-stars"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+        <div class="tc-text">Managing portfolios for 40+ clients is now completely seamless. The multi-account support is a game-changer for advisors like me.</div>
+        <div class="tc-auth"><div class="tc-av" style="background:linear-gradient(135deg,#dc2626,#ef4444)">V</div><div><div class="tc-name">Vijay M.</div><div class="tc-loc">Hyderabad · Fund Manager</div></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="testi-ctrl">
+    <button class="tarrow" onclick="testSlide(-1)"><i class="fa-solid fa-arrow-left fa-sm"></i></button>
+    <div class="testi-dots" id="tdots"></div>
+    <button class="tarrow" onclick="testSlide(1)"><i class="fa-solid fa-arrow-right fa-sm"></i></button>
+  </div>
+</section>
+
+<!-- Footer loaded from footer.html -->
+<div id="footer-placeholder"></div>
+
+<script>
+/* ── LOAD HEADER & FOOTER ── */
+function loadIncludes() {
+  return Promise.all([
+    fetch('header.html').then(r=>r.text()).then(html=>{
+      document.getElementById('header-placeholder').innerHTML=html;
+    }),
+    fetch('footer.html').then(r=>r.text()).then(html=>{
+      document.getElementById('footer-placeholder').innerHTML=html;
+    })
+  ]);
+}
+
+loadIncludes().then(()=>{
+  /* ── NAV ── */
+  window.addEventListener('scroll',()=>{
+    const nav=document.getElementById('nav');
+    if(nav) nav.classList.toggle('scrolled',scrollY>60);
+  });
+  const ham=document.getElementById('ham');
+  if(ham) ham.addEventListener('click',()=>{
+    ham.classList.toggle('active');
+    document.getElementById('mobmenu').classList.toggle('open');
+  });
+
+  /* ── MODAL ── */
+  const modalEl=document.getElementById('modal');
+  if(modalEl) modalEl.addEventListener('click',e=>{if(e.target===modalEl) closeModal()});
+
+  /* ── REVEAL (re-scan after includes loaded) ── */
+  document.querySelectorAll('.rv,.rv-l,.rv-r').forEach(el=>robs.observe(el));
+});
+
+/* ── GLOBAL FUNCTIONS (available before includes load for onclick handlers) ── */
+function openModal(){const m=document.getElementById('modal');if(m)m.classList.add('open');return false}
+function closeModal(){const m=document.getElementById('modal');if(m)m.classList.remove('open')}
+function closeMob(){
+  const m=document.getElementById('mobmenu');if(m)m.classList.remove('open');
+  const h=document.getElementById('ham');if(h)h.classList.remove('active');
+}
+
+function handleModal(btn){
+  btn.innerHTML='✓ Request Received! We\'ll contact you soon.';
+  btn.style.background='linear-gradient(135deg,#16a34a,#15803d)';btn.disabled=true;
+  setTimeout(closeModal,2600);
+}
+
+
+/* ── REVEAL ── */
+const robs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('vi'),i*55);robs.unobserve(e.target)}});
+},{threshold:.1});
+document.querySelectorAll('.rv,.rv-l,.rv-r').forEach(el=>robs.observe(el));
+
+/* ── COUNTERS ── */
+function cnt(id,target,dur=1800){
+  const el=document.getElementById(id);if(!el)return;
+  const t0=performance.now();
+  function u(now){
+    const p=Math.min((now-t0)/dur,1),e=1-Math.pow(1-p,3);
+    el.textContent=Math.floor(e*target);
+    p<1?requestAnimationFrame(u):el.textContent=target;
+  }
+  requestAnimationFrame(u);
+}
+new IntersectionObserver((entries,obs)=>{
+  if(entries[0].isIntersecting){
+    cnt('st1',120);cnt('st2',99);cnt('st3',5);cnt('st4',200);
+    obs.unobserve(entries[0].target);
+  }
+},{threshold:.3}).observe(document.getElementById('stats-strip'));
+
+new IntersectionObserver((entries,obs)=>{
+  if(entries[0].isIntersecting){
+    cnt('an1',500);cnt('an2',5000);cnt('an3',15);
+    obs.unobserve(entries[0].target);
+  }
+},{threshold:.3}).observe(document.getElementById('about'));
+
+/* ── TESTI SLIDER ── */
+const tt=document.getElementById('ttrack'),tcards=[...document.querySelectorAll('.tcard')];
+let tc=0;
+const pv=()=>innerWidth<768?1:innerWidth<1100?2:3;
+function buildDots(){
+  const d=document.getElementById('tdots'),pages=Math.ceil(tcards.length/pv());
+  d.innerHTML='';
+  for(let i=0;i<pages;i++){const b=document.createElement('button');b.className='tdot'+(i===tc?' on':'');b.onclick=()=>{tc=i;upd()};d.appendChild(b);}
+}
+function upd(){
+  const w=tt.parentElement.offsetWidth/pv();
+  tt.style.transform=`translateX(-${tc*w*pv()}px)`;
+  document.querySelectorAll('.tdot').forEach((d,i)=>d.classList.toggle('on',i===tc));
+}
+function testSlide(dir){const p=Math.ceil(tcards.length/pv());tc=Math.max(0,Math.min(tc+dir,p-1));upd();buildDots();}
+buildDots();window.addEventListener('resize',()=>{buildDots();upd();});
+
+/* ── FORMS ── */
+function handleMC(){
+  document.querySelector('.mc-form').innerHTML='<span style="color:var(--em);font-size:16px;font-weight:700"><i class="fa-solid fa-circle-check"></i> Thank you! We\'ll call you shortly.</span>';
+}
+function handleCF(e){
+  e.preventDefault();
+  const btn=e.target.querySelector('button[type=submit]');
+  btn.textContent='✓ Submitted! We\'ll reach you in 2 hours.';btn.style.background='linear-gradient(135deg,#16a34a,#15803d)';btn.disabled=true;
+  return false;
+}
+</script>
+</body>
+</html>
